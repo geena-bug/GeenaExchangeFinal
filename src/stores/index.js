@@ -10,3 +10,13 @@ export const useCounterStore = defineStore('counter', () => {
 
   return { count, doubleCount, increment }
 })
+
+export const usePageTitle = defineStore('pageTitle', () => {
+  const pageTitle = ref('')
+  const routerName = ref('')
+  function setPageTitle(title, routeName) {
+    pageTitle.value = title
+    routerName.value = routeName
+  }
+  return { pageTitle, setPageTitle, routerName }
+})
