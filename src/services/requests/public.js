@@ -37,4 +37,12 @@ export const getLoggedInUser = async () => {
   return apiService.get(`${resources}me`);
 }
 
+export const getUsers = async () => {
+  return apiService.get(`/admin/list-users`);
+}
+
+export const deleteAppUser = async (id) => {
+  return apiService.delete(`/admin/delete-user/${id}`);
+}
+
 

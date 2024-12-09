@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import {
   Dialog,
   DialogPanel,
@@ -22,8 +22,10 @@ import {
 } from '@heroicons/vue/24/outline'
 import { ChevronDownIcon } from '@heroicons/vue/20/solid'
 import { RouterLink, RouterView } from 'vue-router'
-import { usePageTitle } from '@/stores/index.js'
+import { useAppUser, usePageTitle } from '@/stores/index.js'
 import { storeToRefs } from "pinia";
+import { getLoggedInUser } from '@/services/requests/public.js'
+import store from 'store'
 
 const navigation = [
   { name: 'Dashboard', routeName: 'user-panel.home', icon: HomeIcon, current: true },
@@ -35,7 +37,7 @@ const navigation = [
   },
   { name: 'Update Profile', routeName: 'user-panel.profile', icon: FolderIcon, current: false },
   { name: 'Live Exchange Rate', routeName: 'user-panel.live-exchange', icon: CalendarIcon, current: false },
-  { name: 'All Users', href: '#', icon: UsersIcon, current: false },
+  { name: 'All Users', routeName: 'user-panel.users', icon: UsersIcon, current: false },
 ]
 const userNavigation = [
   { name: 'Update Password', routeName: 'user-panel.update-password' },
@@ -47,9 +49,22 @@ const userNavigation = [
 const navPageTitle = usePageTitle()
 const { pageTitle, routerName  } = storeToRefs(navPageTitle)
 
-// onMounted(() => (currentRouteName.value = currentRoute.name))
-
 const sidebarOpen = ref(false)
+
+const user = useAppUser()
+const getCurrentUser = async () => {
+  try {
+    const response = await getLoggedInUser()
+    user.setAppUser(response.data.user)
+    store.set('userType', response.data.user.user_type)
+  } catch (error) {
+    console.log(error)
+  }
+}
+onMounted(() => {
+  getCurrentUser()
+})
+const {appUser} = storeToRefs(useAppUser())
 </script>
 
 <template>
@@ -270,7 +285,7 @@ const sidebarOpen = ref(false)
 <!--                />-->
                 <span class="hidden lg:flex lg:items-center">
                   <span class="ml-4 text-sm/6 font-semibold text-gray-900" aria-hidden="true"
-                    >Tom Cooke</span
+                    >{{`${appUser.first_name} ${appUser.last_name}`}}</span
                   >
                   <ChevronDownIcon class="ml-2 size-5 text-gray-400" aria-hidden="true" />
                 </span>

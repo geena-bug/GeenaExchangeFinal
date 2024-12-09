@@ -49,6 +49,23 @@ const router = createRouter({
             pageTitle: 'Live Exchange Rate',
           }
         },
+        {
+          path: '/users',
+          name: 'user-panel.users',
+          component: () => import('../pages/user/Users.vue'),
+          meta: {
+            pageTitle: 'Users',
+            isAdmin: true,
+          }
+        },
+        {
+          path: '/403',
+          name: 'user-panel.403',
+          component: () => import('../pages/403Page.vue'),
+          meta: {
+            pageTitle: 'Forbidden Access',
+          }
+        },
       ],
       meta: {
         authRequired: true,
@@ -85,10 +102,12 @@ router.beforeEach((to, from, next) => {
         path: '/auth/login',
         query: { redirect: to.fullPath },
       })
-    } else {
+    }
+    else {
       next()
     }
-  } else {
+  }
+  else {
     next()
   }
 })

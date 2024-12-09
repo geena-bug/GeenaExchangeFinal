@@ -2,21 +2,26 @@
 import { onMounted, ref } from 'vue'
 import { Form } from 'vee-validate'
 import * as yup from 'yup'
-import { signUp } from '@/services/requests/auth.js'
 import { toast } from 'vue3-toastify'
 import CustomInput from '@/components/forms/CustomInput.vue'
 import CustomSelect from '@/components/forms/CustomSelect.vue'
 import CustomButton from '@/components/forms/CustomButton.vue'
 import { getLoggedInUser, updateProfile } from '@/services/requests/public.js'
 import { setPageTitle } from '@/helper/index.js'
+import { useAppUser } from '@/stores/index.js'
+import store from 'store'
 
-const options = ref([{
-  value: 'admin',
-  label: 'Admin'
-}, {
-  value: 'user',
-  label: 'User'
-}])
+const options = ref([
+  {
+    value: 'admin',
+    label: 'Admin',
+  },
+  {
+    value: 'user',
+    label: 'User',
+  },
+])
+const user = useAppUser()
 const loading = ref(false)
 const form = ref(null)
 
@@ -35,7 +40,7 @@ const schema = yup.object({
 })
 
 const submit = async (values) => {
-  try{
+  try {
     loading.value = true
     await updateProfile({
       first_name: values.first_name,
@@ -43,11 +48,18 @@ const submit = async (values) => {
       email: values.email,
       user_type: values.user_type,
     })
+    user.setAppUser({
+      first_name: values.first_name,
+      last_name: values.last_name,
+      email: values.email,
+      user_type: values.user_type
+    })
+    store.set('userType', values.user_type)
     toast.success('Profile created successfully')
-  }catch (error){
-    const {message} = error.response.data
+  } catch (error) {
+    const { message } = error.response.data
     toast.error(message)
-  }finally {
+  } finally {
     loading.value = false
   }
 }
@@ -58,8 +70,8 @@ const getMe = async () => {
       first_name: response.data.user.first_name,
       last_name: response.data.user.last_name,
       email: response.data.user.email,
-      user_type: response.data.user.user_type
-    }
+      user_type: response.data.user.user_type,
+    },
   })
 }
 
@@ -73,7 +85,7 @@ onMounted(() => {
   <div class="w-full">
     <div class="w-full mt-5">
       <div class="flex justify-between items-center w-full">
-        <h1 class="text-sm my-5 font-bold">Update Profile </h1>
+        <h1 class="text-sm my-5 font-bold">Update Profile</h1>
       </div>
       <div>
         <div class="mt-8 flow-root">

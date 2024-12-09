@@ -1,15 +1,5 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
-
-export const useCounterStore = defineStore('counter', () => {
-  const count = ref(0)
-  const doubleCount = computed(() => count.value * 2)
-  function increment() {
-    count.value++
-  }
-
-  return { count, doubleCount, increment }
-})
 
 export const usePageTitle = defineStore('pageTitle', () => {
   const pageTitle = ref('')
@@ -19,4 +9,18 @@ export const usePageTitle = defineStore('pageTitle', () => {
     routerName.value = routeName
   }
   return { pageTitle, setPageTitle, routerName }
+})
+
+export const useAppUser = defineStore('appUser', () => {
+  const appUser = ref({
+    id: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    user_type: '',
+  })
+  function setAppUser(user) {
+    appUser.value = user
+  }
+  return { appUser, setAppUser }
 })
