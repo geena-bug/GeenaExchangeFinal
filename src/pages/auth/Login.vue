@@ -6,6 +6,7 @@ import { ref } from 'vue'
 import * as yup from 'yup'
 import { login } from '@/services/requests/auth.js'
 import { toast } from 'vue3-toastify'
+import { RouterLink } from 'vue-router'
 import store from 'store'
 
 const loading = ref(false)
@@ -67,6 +68,11 @@ const submit = async (values) => {
           <CustomButton text="Sign In" :loading="loading" />
         </div>
       </Form>
+      <p class="mt-10 text-center text-sm/6 text-gray-500">
+        Not a member?
+        {{ ' ' }}
+        <router-link :to="{name: 'sign-up'}" class="font-semibold text-indigo-600 hover:text-indigo-500">Sign up</router-link>
+      </p>
     </div>
   </div>
 </template>

@@ -7,6 +7,7 @@ import CustomInput from '@/components/forms/CustomInput.vue'
 import CustomSelect from '@/components/forms/CustomSelect.vue'
 import CustomButton from '@/components/forms/CustomButton.vue'
 import { signUp } from '@/services/requests/auth.js'
+import { RouterLink } from 'vue-router'
 
 const options = ref([{
   value: 'admin',
@@ -59,7 +60,7 @@ const submit = async (values) => {
 </script>
 
 <template>
-  <div class="flex min-h-full flex-1 h-screen">
+  <div class="flex min-h-full flex-1">
     <div
       class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24"
     >
@@ -70,10 +71,10 @@ const submit = async (values) => {
             src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
             alt="Your Company"
           />
-          <h2 class="mt-8 text-2xl/9 font-bold tracking-tight text-gray-900">Create an account</h2>
+          <h2 class="mt-4 text-2xl/9 font-bold tracking-tight text-gray-900">Create an account</h2>
         </div>
 
-        <div class="mt-10">
+        <div class="mt-5">
           <div>
             <Form
               ref="form"
@@ -95,6 +96,12 @@ const submit = async (values) => {
             </Form>
           </div>
         </div>
+
+        <p class="mt-4 text-center text-sm/6 text-gray-500">
+          Already a member?
+          {{ ' ' }}
+          <router-link :to="{name: 'login'}" class="font-semibold text-indigo-600 hover:text-indigo-500">Login</router-link>
+        </p>
       </div>
     </div>
     <div class="relative hidden w-0 flex-1 lg:block">
