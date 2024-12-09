@@ -8,7 +8,13 @@ import CustomSelect from '@/components/forms/CustomSelect.vue'
 import CustomButton from '@/components/forms/CustomButton.vue'
 import { signUp } from '@/services/requests/auth.js'
 
-const options = ref(['admin', 'user'])
+const options = ref([{
+  value: 'admin',
+  label: 'Admin'
+}, {
+  value: 'user',
+  label: 'User'
+}])
 const loading = ref(false)
 const form = ref(null)
 const formData = ref({
