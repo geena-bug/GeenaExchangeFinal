@@ -170,6 +170,16 @@ const singleConversion = async (data) => {
   }
 }
 
+const isNumber = (evt) => {
+  evt = (evt) ? evt : window.event;
+  const charCode = (evt.which) ? evt.which : evt.keyCode;
+  if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
+    evt.preventDefault();
+  } else {
+    return true;
+  }
+}
+
 const formattedCurrency = (amount, currencyCodeSymbol) =>
   `${currencyCodeSymbol} ${amount.toLocaleString({
     minimumFractionDigits: 2,
@@ -233,6 +243,12 @@ onMounted(() => {
                         scope="col"
                         class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                       >
+                        Amount From
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
                         Currency From
                       </th>
                       <th
@@ -265,6 +281,9 @@ onMounted(() => {
                         {{ index + 1 }}
                       </td>
                       <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                        {{ formattedCurrency(conversion.amount, country.currency_symbol) }}
+                      </td>
+                      <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                         <span :class="`fi fi-${country.country_iso.toLowerCase()}`"></span>
                         {{ country.name }}
                       </td>
@@ -273,7 +292,7 @@ onMounted(() => {
                         {{ countryTo.name }}
                       </td>
                       <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                        {{ `${countryTo.currency_symbol} ${conversion.converted_amount}` }}
+                        {{ `${formattedCurrency(conversion.converted_amount, countryTo.currency_symbol)}` }}
                       </td>
                       <td
                         class="relative py-4 pr-4 pl-3 text-sm font-medium whitespace-nowrap sm:pr-6"
@@ -302,7 +321,7 @@ onMounted(() => {
           :validation-schema="schema"
           :initial-values="formData"
         >
-          <CustomInput name="amount" label="Amount to Convert" type="text" />
+          <CustomInput name="amount" label="Amount to Convert" type="text" @keydown="isNumber($event)" />
           <CustomSelect :options="currencyList" name="currencyFrom" label="Currency From" />
           <CustomSelect :options="currencyList" name="currencyTo" label="Currency To" />
           <div class="flex justify-between">

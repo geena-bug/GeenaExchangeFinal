@@ -41,6 +41,10 @@ const deleteMyConversion = async (id) => {
     console.log(error)
   }
 }
+const formattedCurrency = (amount, currencyCodeSymbol) =>
+  `${currencyCodeSymbol} ${amount.toLocaleString({
+    minimumFractionDigits: 2,
+  })}`
 onMounted(() => {
   setPageTitle()
   getConversions()
@@ -67,6 +71,12 @@ onMounted(() => {
                         class="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                       >
                         S/N
+                      </th>
+                      <th
+                        scope="col"
+                        class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                      >
+                        Amount From
                       </th>
                       <th
                         scope="col"
@@ -107,6 +117,9 @@ onMounted(() => {
                         {{ index + 1 }}
                       </td>
                       <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                        {{ formattedCurrency(conversion.amount, country.currency_symbol) }}
+                      </td>
+                      <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                         <span :class="`fi fi-${country.country_iso.toLowerCase()}`"></span>
                         {{ country.name }}
                       </td>
@@ -115,7 +128,7 @@ onMounted(() => {
                         {{ countryTo.name }}
                       </td>
                       <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                        {{ `${countryTo.currency_symbol} ${conversion.converted_amount}` }}
+                        {{ formattedCurrency(conversion.converted_amount, countryTo.currency_symbol) }}
                       </td>
                       <td
                         class="relative py-4 pr-4 pl-3 text-sm font-medium whitespace-nowrap sm:pr-6"
